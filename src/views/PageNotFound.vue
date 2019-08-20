@@ -7,7 +7,7 @@
       <v-flex
         xs12
         >
-
+        404
       </v-flex>
     </v-layout>
   </v-container>

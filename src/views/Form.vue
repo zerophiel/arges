@@ -4,28 +4,48 @@
       text-center
       wrap
     >
-      <v-flex
-        xs12
-        >
-        <v-card>
-          <v-card-title>
-            Affected Apps
-            <v-spacer></v-spacer>
-            <v-text-field
-                    v-model="search"
-                    append-icon="mdi-magnify"
-                    label="Search"
-                    single-line
-                    hide-details
-            ></v-text-field>
-          </v-card-title>
-          <v-data-table
-                  :headers="headers"
-                  :items="affectedApp"
-                  :search="search"
-          ></v-data-table>
-        </v-card>
+      <v-flex xs3>
+
       </v-flex>
+      <v-flex
+        xs6
+        >
+        <form>
+          <v-text-field
+                  v-model="name"
+                  label="Name"
+                  required
+          ></v-text-field>
+          <v-text-field
+                  v-model="number"
+                  label="Number"
+                  type="number"
+                  required
+          ></v-text-field>
+
+
+          <v-btn class="mr-4" @click="submit">submit</v-btn>
+          <v-btn @click="clear">clear</v-btn>
+        </form>
+
+      </v-flex>
+      <v-flex xs3>
+
+      </v-flex>
+      <div class="text-center ma-2">
+        <v-snackbar
+                v-model="snackbar"
+        >
+          {{ snackbarText }}
+          <v-btn
+                  color="pink"
+                  text
+                  @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </v-snackbar>
+      </div>
     </v-layout>
   </v-container>
 </template>
@@ -33,40 +53,38 @@
 <script>
 export default {
   data: () => ({
-    search: "",
-    headers: [
-      {
-        text: 'ID',
-        align: 'center',
-        value: 'affectedAppId',
-      },
-      {
-        text: 'Label',
-        align: 'center',
-        value: 'affectedAppLabel',
-      },
-    ],
-    affectedApp: []
+    name:"",
+    number:"",
+    snackbar:false,
+    snackbarText:""
+
   }),
   mounted() {
-    this.getAllAffectedApp()
+
   },
   methods: {
-    getAllAffectedApp: function(){
-      this.$http.get("https://pedas.gdn-app.com/hermes/affected-apps/")
+    submit () {
+      let postData = {
+        name: this.name,
+        number: parseInt(this.number)
+      }
+      this.$http.post(process.env.VUE_APP_BRONTES + "/future-project/records/",postData)
               .then(response => {
-                for(let i = 0; i < response.data.data.length; i++){
-                  this.affectedApp.push({
-                    id: response.data.data[i].ID,
-                    affectedAppId: response.data.data[i].Code,
-                    affectedAppLabel: response.data.data[i].Name
-                  })
-                }
+                this.snackbarText=response.data.message
+                this.snackbar=true
+                this.name = ''
+                this.number = ''
               })
               .catch(e => {
-                console.log(e)
+                this.snackbarText=response.data.message
+                this.snackbar=true
               })
     },
+    clear () {
+      this.name = ''
+      this.number = ''
+    },
+
   }
 };
 </script>
