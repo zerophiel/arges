@@ -4,15 +4,12 @@
                 text-center
                 wrap
         >
-            <v-flex>
-                <v-btn @click="emit">EMIT</v-btn>
-            </v-flex>
             <v-flex
                     xs12
             >
                 <v-card>
                     <v-card-title>
-                        Affected Apps
+                        Scoreboard
                         <v-spacer></v-spacer>
                         <v-text-field
                                 v-model="search"
@@ -24,7 +21,7 @@
                     </v-card-title>
                     <v-data-table
                             :headers="headers"
-                            :items="affectedApp"
+                            :items="items"
                             :search="search"
                     ></v-data-table>
                 </v-card>
@@ -39,23 +36,28 @@
             search: "",
             headers: [
                 {
-                    text: 'ID',
+                    text: 'Name',
                     align: 'center',
-                    value: 'affectedAppId',
+                    value: 'name',
                 },
                 {
-                    text: 'Label',
+                    text: 'Count',
                     align: 'center',
-                    value: 'affectedAppLabel',
+                    value: 'count',
                 },
             ],
-            affectedApp: [],
+            items: [],
         }),
+        sockets: {
+            connect: function () {
+                console.log('socket connected')
+            },
+            updateScoreboard: function (data) {
+                this.items = data.data
+            }
+        },
         mounted() {
             this.getAllAffectedApp()
-            this.$socket.on("reply-test", (message) => {
-                console.log(message)
-            })
         },
         methods: {
             emit: function(){
@@ -64,13 +66,7 @@
             getAllAffectedApp: function () {
                 this.$http.get("https://pedas.gdn-app.com/hermes/affected-apps/")
                     .then(response => {
-                        for (let i = 0; i < response.data.data.length; i++) {
-                            this.affectedApp.push({
-                                id: response.data.data[i].ID,
-                                affectedAppId: response.data.data[i].Code,
-                                affectedAppLabel: response.data.data[i].Name
-                            })
-                        }
+                        this.items = response.data.data
                     })
                     .catch(e => {
                         console.log(e)
