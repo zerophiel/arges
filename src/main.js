@@ -12,8 +12,8 @@ Vue.config.productionTip = false
 Vue.prototype.$http = axios
 
 Vue.use(new VueSocketIO({
-    debug: true,
-    connection: 'http://perfutility-6.perf.lokal:5556', //GANTI HOST NANTI SESUAI DOMAIN
+    debug: false,
+    connection: 'https://futureprogram.gdn-app.com', //GANTI HOST NANTI SESUAI DOMAIN
     options: { path: "/socket/" } //Optional options
 }))
 
