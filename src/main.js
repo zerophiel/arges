@@ -13,7 +13,7 @@ Vue.prototype.$http = axios
 
 Vue.use(new VueSocketIO({
     debug: true,
-    connection: 'http://localhost',
+    connection: 'http://perfutility-6.perf.lokal:5556', //GANTI HOST NANTI SESUAI DOMAIN
     options: { path: "/socket/" } //Optional options
 }))
 

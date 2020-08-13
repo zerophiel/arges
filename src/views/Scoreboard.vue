@@ -38,12 +38,12 @@
                 {
                     text: 'Name',
                     align: 'center',
-                    value: 'name',
+                    value: 'Name',
                 },
                 {
                     text: 'Count',
                     align: 'center',
-                    value: 'count',
+                    value: 'Count',
                 },
             ],
             items: [],
@@ -53,6 +53,7 @@
                 console.log('socket connected')
             },
             updateScoreboard: function (data) {
+                console.log(data)
                 this.items = data.data
             }
         },
@@ -64,7 +65,7 @@
                 this.$socket.emit("test","coba")
             },
             getAllAffectedApp: function () {
-                this.$http.get("https://pedas.gdn-app.com/hermes/affected-apps/")
+                this.$http.get("http://perfutility-6.perf.lokal:5555/brontes/future-project/record-count/") //NANTI GANTI SESUAI DOMAIN
                     .then(response => {
                         this.items = response.data.data
                     })
